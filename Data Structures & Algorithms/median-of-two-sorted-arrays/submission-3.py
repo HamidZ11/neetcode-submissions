@@ -1,0 +1,33 @@
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        if len(nums1) > len(nums2):
+            nums1, nums2 = nums2, nums1
+
+        m = len(nums1)
+        n = len(nums2)
+
+        leftPartSize = (m + n + 1) // 2
+
+        left = 0
+        right = m ## only binary searching the smaller array 
+
+        while left <= right: 
+            cut1 = (left + right) // 2 ## middle is representing a cut position 
+            cut2 = leftPartSize - cut1
+
+            left1 = float("-inf") if cut1 == 0 else nums1[cut1 - 1]
+            right1 = float("inf") if cut1 == m else nums1[cut1]
+            
+            left2 = float("-inf") if cut2 == 0 else nums2[cut2 - 1]
+            right2 = float("inf") if cut2 == n else nums2[cut2]
+
+            if left1 <= right2 and left2 <= right1:
+                if (m + n) % 2 == 0:
+                    return (max(left1, left2) + min(right1, right2)) / 2 ## if there are an even numbers of nums in array
+                else:
+                    return max(left1, left2)
+            
+            elif left1 > right2:
+                right = cut1 - 1
+            else:
+                left = cut1 + 1
